@@ -4,6 +4,8 @@ package chapter2
  * Created by Fansy on 2016/1/26.
  */
 
+import java.io.File
+
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkConf
@@ -12,8 +14,12 @@ import org.apache.spark.SparkContext._
 import utils.Utils
 
 object TestInitialSparkContext extends App{
-  val inputFile = "hdfs://node88:8020/user/Administrator/naivebayes.txt"
-  val outputFile = "hdfs://node88:8020/user/Administrator/wc_00";
+  val t = "1"
+  t.toDouble
+  println(Utils.ROOTURL);
+  val inputFile = Utils.HDFS +"/user/root/bank.csv"
+  val outputFile = Utils.HDFS + "/user/fansy/wc_00";
+//  val outputFile = "C:\\opt\\wc_00"
   val path:Path = new Path(outputFile)//得到一个Path
   val hConf:Configuration = Utils.getHadoopConf
 
@@ -24,11 +30,11 @@ object TestInitialSparkContext extends App{
   }else{
     println("文件不存在,开始生成.....!")
   }
-  val conf = new SparkConf().setMaster("spark://node88:7077").setAppName("My App")
-  val sc = new SparkContext(conf)
-  sc.addJar("E:\\fansy_work\\project\\Spark141\\out\\artifacts\\Spark141_jar\\Spark141.jar");
 
+//  sc.addFile(Utils.ROOTURL +File.separator+ "out"+File.separator+"artifacts"+File.separator
+//      +"Spark141_jar"+File.separator+"Spark141.jar")
   // Load our input data.
+  val sc = Utils.getSparkConf
   val input = sc.textFile(inputFile)
   // Split it up into words.
   val words = input.flatMap(line => line.split(" "))
