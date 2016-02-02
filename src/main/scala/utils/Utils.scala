@@ -5,7 +5,7 @@ import java.io.File
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.{SparkContext, SparkConf}
-
+import org.apache.hadoop.fs.Path
 /**
  * Created by Fansy on 2016/1/26.
  */
@@ -28,6 +28,10 @@ object Utils{
   }
   def getFs={
     FileSystem.get(getHadoopConf)
+  }
+  def delHDFS(file:String,delSub:Boolean)={
+    val path = new Path(file)
+    if(getFs.exists(path)) getFs.delete(path,delSub)
   }
 
   def getSparkConf():SparkContext={
